@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "799203422311",
+    "project_id": "kayla-eddd7",
+    "storage_bucket": "kayla-eddd7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799203422311:android:91cc9b29232709955a64c2",
+        "android_client_info": {
+          "package_name": "com.example.doctor_booking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyOEYJ0gMqDguypLHFl8JplVDXs_U_xNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
