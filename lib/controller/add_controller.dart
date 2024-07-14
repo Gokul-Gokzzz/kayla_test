@@ -1,9 +1,10 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:doctor_booking/model/doctor_model.dart';
-import 'package:doctor_booking/service/doctor_service.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:developer';
+
+import 'package:doctor_booking/service/doctor_service.dart';
+import 'package:doctor_booking/model/doctor_model.dart';
 
 class AddProvider extends ChangeNotifier {
   final TextEditingController nameController = TextEditingController();
@@ -14,6 +15,14 @@ class AddProvider extends ChangeNotifier {
   String? districtCategory;
   String? genderCategory;
   File? image;
+  final ImagePicker picker = ImagePicker();
+  List<DoctorModel> allDoctor = [];
+
+  void setImage(File pickedImage) {
+    image = pickedImage;
+    notifyListeners();
+  }
+
   List<DropdownMenuItem<String>> genderItems = [
     const DropdownMenuItem(value: 'Male', child: Text('Male')),
     const DropdownMenuItem(value: 'Female', child: Text('Female')),
@@ -33,21 +42,19 @@ class AddProvider extends ChangeNotifier {
     const DropdownMenuItem(
         value: 'Pathanamthitta', child: Text('Pathanamthitta')),
     const DropdownMenuItem(
-        value: 'Thiruvananthapuram',
-        child: Text(
-          'Trivandrum',
-        )),
+        value: 'Thiruvananthapuram', child: Text('Thiruvananthapuram')),
     const DropdownMenuItem(value: 'Thrissur', child: Text('Thrissur')),
     const DropdownMenuItem(value: 'Wayanad', child: Text('Wayanad')),
   ];
 
-  Future<void> addDoctor(
-      {required String name,
-      required String districtCategory,
-      required String email,
-      required String phoneNumber,
-      required String genderCategory,
-      File? image}) async {
+  Future<void> addDoctor({
+    required String name,
+    required String districtCategory,
+    required String email,
+    required String phoneNumber,
+    required String genderCategory,
+    File? image,
+  }) async {
     try {
       String imageUrl = '';
       if (image != null) {
@@ -62,9 +69,40 @@ class AddProvider extends ChangeNotifier {
         imageUrl: imageUrl,
       );
       await doctorService.addDoctor(doctor);
+      getDoctor(); // Update the list of doctors
       notifyListeners();
     } catch (error) {
       log('add controller error:$error');
     }
+  }
+
+  Future<void> getDoctor() async {
+    allDoctor = await doctorService.getAllDoctors();
+    notifyListeners();
+  }
+
+  Future<void> clear() async {
+    nameController.clear();
+    emailController.clear();
+    phoneController.clear();
+    image = null;
+    districtCategory = null;
+    genderCategory = null;
+    notifyListeners();
+  }
+
+  updateDoctor(String id, DoctorModel doctor) async {
+    try {
+      await doctorService.update(id, doctor);
+      notifyListeners();
+    } catch (e) {
+      log("error on update controller:$e");
+    }
+  }
+
+  deleteDoctor(String id) async {
+    await doctorService.delete(id);
+    await getDoctor();
+    notifyListeners();
   }
 }

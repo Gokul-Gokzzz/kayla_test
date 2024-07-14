@@ -1,17 +1,33 @@
-import 'package:doctor_booking/controller/home_controller.dart';
+import 'package:doctor_booking/controller/add_controller.dart';
 import 'package:doctor_booking/widgets/add_screen.dart';
-import 'package:doctor_booking/widgets/doctor_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:doctor_booking/controller/home_controller.dart';
+import 'package:doctor_booking/widgets/doctor_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<HomeProvider>(context, listen: false).getDoctor();
+  }
+
+  Future<void> refreshDoctors() async {
+    await Provider.of<HomeProvider>(context, listen: false).getDoctor();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-    final pro = Provider.of<HomeProvider>(context, listen: false);
+    final homeProvider = Provider.of<HomeProvider>(context);
+    final pro = Provider.of<AddProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -20,55 +36,56 @@ class HomeScreen extends StatelessWidget {
           SizedBox(
             width: size.width * 0.3,
             child: DropdownButton<String>(
-              underline: const SizedBox(
-                height: 0,
-              ),
+              underline: const SizedBox(height: 0),
               hint: const Text('Gender'),
               isExpanded: true,
+              value: homeProvider.selectedGender,
               items: pro.genderItems,
-              onChanged: (value) {},
+              onChanged: (value) {
+                homeProvider.setSelectedGender(value);
+              },
             ),
           ),
           SizedBox(
             width: size.width * 0.3,
             child: DropdownButton<String>(
-              underline: const SizedBox(
-                height: 0,
-              ),
+              underline: const SizedBox(height: 0),
               hint: const Text('District'),
               isExpanded: true,
+              value: homeProvider.selectedDistrict,
               items: pro.districtItems,
-              onChanged: (value) {},
+              onChanged: (value) {
+                homeProvider.setSelectedDistrict(value);
+              },
             ),
           ),
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(
-          vertical: size.height * 0.02,
-          horizontal: size.width * 0.02,
+      body: RefreshIndicator(
+        onRefresh: refreshDoctors,
+        child: Consumer<HomeProvider>(
+          builder: (context, provider, child) {
+            if (provider.filteredDoctors.isEmpty) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: provider.filteredDoctors.length,
+                itemBuilder: (context, index) {
+                  final doctor = provider.filteredDoctors[index];
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: size.height * 0.02,
+                      horizontal: size.width * 0.02,
+                    ),
+                    child: DoctorCard(doctor: doctor),
+                  );
+                },
+              );
+            }
+          },
         ),
-        children: [
-          DoctorCard(
-            name: 'Dr.Neeraj Madhav',
-            email: 'neeraj@gmail.com',
-            district: 'Ernakulam',
-          ),
-          DoctorCard(
-              name: 'Dr.Rashma R Mohan',
-              email: 'rashma@gmail.com',
-              district: 'Ernakulam'),
-          DoctorCard(
-              name: 'Dr.Ravi', email: 'ravi@gmail.com', district: 'Ernakulam'),
-          DoctorCard(
-              name: 'Dr.Ravi', email: 'ravi@gmail.com', district: 'Ernakulam'),
-          DoctorCard(
-              name: 'Dr.Ravi', email: 'ravi@gmail.com', district: 'Ernakulam'),
-          DoctorCard(
-              name: 'Dr.Ravi', email: 'ravi@gmail.com', district: 'Ernakulam'),
-          DoctorCard(
-              name: 'Dr.Ravi', email: 'ravi@gmail.com', district: 'Ernakulam'),
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
@@ -79,7 +96,7 @@ class HomeScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => const AddDoctors(),
             ),
-          );
+          ).then((_) => refreshDoctors());
         },
         child: const Icon(
           Icons.add,

@@ -25,4 +25,32 @@ class DoctorService {
     final uploadTask = await storageRef.putFile(image);
     return await uploadTask.ref.getDownloadURL();
   }
+
+  Future<List<DoctorModel>> getAllDoctors() async {
+    try {
+      final snapshot = await firestore.collection(collection).get();
+      List<DoctorModel> data = snapshot.docs
+          .map(
+            (doc) => DoctorModel.fromJson(doc.data() as Map<String, dynamic>),
+          )
+          .toList();
+      return data;
+    } catch (e) {
+      log('get error :$e');
+      throw e;
+    }
+  }
+
+  Future<void> update(String id, DoctorModel doctor) async {
+    try {
+      await firestore.collection(collection).doc(id).update(doctor.toJson());
+    } catch (e) {
+      log('update errer:$e');
+      throw e;
+    }
+  }
+
+  Future<void> delete(String id) async {
+    await firestore.collection(collection).doc(id).delete();
+  }
 }

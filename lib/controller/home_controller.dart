@@ -1,30 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:doctor_booking/service/doctor_service.dart';
+import 'package:doctor_booking/model/doctor_model.dart';
 
 class HomeProvider extends ChangeNotifier {
-  List<DropdownMenuItem<String>> genderItems = [
-    const DropdownMenuItem(value: 'Male', child: Text('Male')),
-    const DropdownMenuItem(value: 'Female', child: Text('Female')),
-  ];
+  final DoctorService doctorService = DoctorService();
+  List<DoctorModel> allDoctors = [];
+  List<DoctorModel> filteredDoctors = [];
+  String? selectedGender;
+  String? selectedDistrict;
 
-  List<DropdownMenuItem<String>> districtItems = [
-    const DropdownMenuItem(value: 'Alappuzha', child: Text('Alappuzha')),
-    const DropdownMenuItem(value: 'Ernakulam', child: Text('Ernakulam')),
-    const DropdownMenuItem(value: 'Idukki', child: Text('Idukki')),
-    const DropdownMenuItem(value: 'Kannur', child: Text('Kannur')),
-    const DropdownMenuItem(value: 'Kasaragod', child: Text('Kasaragod')),
-    const DropdownMenuItem(value: 'Kollam', child: Text('Kollam')),
-    const DropdownMenuItem(value: 'Kottayam', child: Text('Kottayam')),
-    const DropdownMenuItem(value: 'Kozhikode', child: Text('Kozhikode')),
-    const DropdownMenuItem(value: 'Malappuram', child: Text('Malappuram')),
-    const DropdownMenuItem(value: 'Palakkad', child: Text('Palakkad')),
-    const DropdownMenuItem(
-        value: 'Pathanamthitta', child: Text('Pathanamthitta')),
-    const DropdownMenuItem(
-        value: 'Thiruvananthapuram',
-        child: Text(
-          'Trivandrum',
-        )),
-    const DropdownMenuItem(value: 'Thrissur', child: Text('Thrissur')),
-    const DropdownMenuItem(value: 'Wayanad', child: Text('Wayanad')),
-  ];
+  HomeProvider() {
+    getDoctor();
+  }
+
+  Future<void> getDoctor() async {
+    allDoctors = await doctorService.getAllDoctors();
+    filteredDoctors = allDoctors;
+    notifyListeners();
+  }
+
+  void filterDoctors() {
+    if (selectedGender == null && selectedDistrict == null) {
+      filteredDoctors = allDoctors;
+    } else {
+      filteredDoctors = allDoctors.where((doctor) {
+        bool matchesGender =
+            selectedGender == null || doctor.genderCategory == selectedGender;
+        bool matchesDistrict = selectedDistrict == null ||
+            doctor.districtCategory == selectedDistrict;
+        return matchesGender && matchesDistrict;
+      }).toList();
+    }
+    notifyListeners();
+  }
+
+  void setSelectedGender(String? gender) {
+    selectedGender = gender;
+    filterDoctors();
+  }
+
+  void setSelectedDistrict(String? district) {
+    selectedDistrict = district;
+    filterDoctors();
+  }
 }

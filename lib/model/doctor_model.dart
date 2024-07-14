@@ -1,26 +1,29 @@
 class DoctorModel {
+  String? id;
   String? name;
-
   String? districtCategory;
   String? email;
   String? phoneNumber;
   String? genderCategory;
-  final String? imageUrl;
+  String? imageUrl;
 
-  DoctorModel(
-      {this.name,
-      this.districtCategory,
-      this.email,
-      this.phoneNumber,
-      this.genderCategory,
-      this.imageUrl});
+  DoctorModel({
+    this.id,
+    this.name,
+    this.districtCategory,
+    this.email,
+    this.phoneNumber,
+    this.genderCategory,
+    this.imageUrl,
+  });
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
     return DoctorModel(
+      id: json['id'],
       name: json['name'],
       districtCategory: json['districtCategory'],
       email: json['email'],
-      phoneNumber: json['PhoneNumber'],
+      phoneNumber: json['phoneNumber'],
       genderCategory: json['genderCategory'],
       imageUrl: json['imageUrl'],
     );
@@ -28,10 +31,11 @@ class DoctorModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'districtCategory': districtCategory,
       'email': email,
-      'PhoneNumber': phoneNumber,
+      'phoneNumber': phoneNumber,
       'genderCategory': genderCategory,
       'imageUrl': imageUrl,
     };

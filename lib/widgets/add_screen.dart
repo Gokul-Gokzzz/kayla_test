@@ -1,32 +1,30 @@
+import 'dart:io';
+
 import 'package:doctor_booking/controller/add_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class AddDoctors extends StatelessWidget {
+class AddDoctors extends StatefulWidget {
   const AddDoctors({super.key});
+
+  @override
+  State<AddDoctors> createState() => _AddDoctorsState();
+}
+
+class _AddDoctorsState extends State<AddDoctors> {
+  Future<void> pickImage() async {
+    final provider = Provider.of<AddProvider>(context, listen: false);
+    final pickFile =
+        await provider.picker.pickImage(source: ImageSource.gallery);
+    if (pickFile != null) {
+      provider.setImage(File(pickFile.path));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AddProvider>(context, listen: false);
-    // final TextEditingController nameController = TextEditingController();
-    // final TextEditingController emailController = TextEditingController();
-    // final TextEditingController phoneController = TextEditingController();
-    // List<String> districts = [
-    //   'Alappuzha',
-    //   'Ernakulam',
-    //   'Idukki',
-    //   'Kannur',
-    //   'Kasaragod',
-    //   'Kollam',
-    //   'Kottayam',
-    //   'Kozhikode',
-    //   'Malappuram',
-    //   'Palakkad',
-    //   'Pathanamthitta',
-    //   'Thiruvananthapuram',
-    //   'Thrissur',
-    //   'Wayanad'
-    // ];
 
     return Scaffold(
       appBar: AppBar(
@@ -39,12 +37,20 @@ class AddDoctors extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage('assets/doto.jpg'),
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {},
+                GestureDetector(
+                  onTap: pickImage,
+                  child: Consumer<AddProvider>(
+                    builder: (context, productProvider, child) {
+                      return productProvider.image == null
+                          ? Container(
+                              height: 100,
+                              width: 100,
+                              color: Colors.grey[200],
+                              child: const Icon(Icons.camera_alt),
+                            )
+                          : Image.file(productProvider.image!,
+                              height: 100, width: 100, fit: BoxFit.cover);
+                    },
                   ),
                 ),
                 SizedBox(height: 16),
@@ -154,20 +160,30 @@ class AddDoctors extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (provider.formKey.currentState!.validate()) {
-                      await provider.addDoctor(
-                        name: provider.nameController.text,
-                        districtCategory: provider.districtCategory.toString(),
-                        email: provider.emailController.text,
-                        phoneNumber: provider.phoneController.text,
-                        genderCategory: provider.genderCategory.toString(),
-                        image: provider.image,
-                      );
-                    }
-                  },
-                  child: Text('Add'),
+                SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 66, 131, 68)),
+                    onPressed: () async {
+                      if (provider.formKey.currentState!.validate()) {
+                        await provider.addDoctor(
+                          name: provider.nameController.text,
+                          districtCategory:
+                              provider.districtCategory.toString(),
+                          email: provider.emailController.text,
+                          phoneNumber: provider.phoneController.text,
+                          genderCategory: provider.genderCategory.toString(),
+                          image: provider.image,
+                        );
+                        provider.clear();
+                      }
+                    },
+                    child: Text(
+                      'Add',
+                      style: TextStyle(fontSize: 17, color: Colors.white),
+                    ),
+                  ),
                 ),
               ],
             ),

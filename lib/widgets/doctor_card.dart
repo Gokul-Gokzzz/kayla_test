@@ -1,12 +1,11 @@
+import 'package:doctor_booking/model/doctor_model.dart';
 import 'package:doctor_booking/widgets/edit_screen.dart';
 import 'package:flutter/material.dart';
 
 class DoctorCard extends StatelessWidget {
-  final String name;
-  final String email;
-  final String district;
+  final DoctorModel doctor;
 
-  DoctorCard({required this.name, required this.email, required this.district});
+  DoctorCard({required this.doctor});
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +17,21 @@ class DoctorCard extends StatelessWidget {
           ),
           height: 50,
           width: 50,
-          child: Image.asset('assets/doto.jpg'),
+          child: Image.network(doctor.imageUrl!),
         ),
         title: Text(
-          name,
+          doctor.name!,
           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              email,
+              doctor.email!,
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
             ),
             Text(
-              district,
+              doctor.districtCategory!,
               style: TextStyle(
                 fontSize: 10,
               ),
@@ -55,13 +54,16 @@ class DoctorCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EditDoctorScreen(),
+                  builder: (context) => EditDoctorScreen(doctor: doctor),
                 ),
               );
             },
             child: Text(
               'Edit Profile',
-              style: TextStyle(color: Colors.white, fontSize: 10),
+              style: TextStyle(
+                color: const Color.fromARGB(255, 147, 106, 106),
+                fontSize: 10,
+              ),
             ),
           ),
         ),
