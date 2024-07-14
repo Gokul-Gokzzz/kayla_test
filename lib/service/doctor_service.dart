@@ -12,7 +12,12 @@ class DoctorService {
 
   Future<void> addDoctor(DoctorModel doctor) async {
     try {
-      await firestore.collection(collection).doc().set(doctor.toJson());
+      DocumentReference docRef = firestore.collection(collection).doc();
+      String id = docRef.id;
+
+      doctor.id = id;
+
+      await docRef.set(doctor.toJson());
     } catch (error) {
       log('service error:$error');
     }

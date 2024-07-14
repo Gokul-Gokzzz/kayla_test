@@ -91,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.green,
         shape: const CircleBorder(),
         onPressed: () {
+          pro.clear();
           Navigator.push(
             context,
             MaterialPageRoute(

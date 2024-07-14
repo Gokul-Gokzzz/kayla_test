@@ -149,7 +149,6 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                   ),
                   onPressed: () async {
                     final updatedDoctor = DoctorModel(
-                      id: widget.doctor.id,
                       name: pro.nameController.text,
                       districtCategory: pro.districtCategory!,
                       email: pro.emailController.text,
@@ -159,8 +158,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                           ? await pro.doctorService.uploadImage(pro.image!)
                           : widget.doctor.imageUrl,
                     );
-                    updateProduct(widget.doctor.id!, widget.doctor);
-                    Navigator.pop(context);
+                    updateProduct(widget.doctor.id!, updatedDoctor);
                   },
                   child: Text(
                     'Save',
@@ -180,7 +178,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     data.name = getProvider.nameController.text;
     data.email = getProvider.emailController.text;
     data.phoneNumber = getProvider.phoneController.text;
-    await getProvider.editDoctor(data.id, data);
+    await getProvider.editDoctor(id, data);
     Navigator.pop(context);
   }
 }

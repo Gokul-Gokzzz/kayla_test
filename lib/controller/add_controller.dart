@@ -67,7 +67,6 @@ class AddProvider extends ChangeNotifier {
         phoneNumber: phoneNumber,
         genderCategory: genderCategory,
         imageUrl: imageUrl,
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
       );
       await doctorService.addDoctor(doctor);
       getDoctor();
@@ -101,13 +100,19 @@ class AddProvider extends ChangeNotifier {
     }
   }
 
-  deleteDoctor(String id) async {
+  Future<void> deleteDoctor(String id) async {
     try {
+      if (id.isEmpty) {
+        log('Delete error: Document ID is empty');
+        return;
+      }
       await doctorService.delete(id);
+      log('Document with ID $id deleted successfully');
+      // Refresh the doctor list after deletion
       await getDoctor();
       notifyListeners();
     } catch (e) {
-      throw e;
+      log('Delete error: $e');
     }
   }
 }

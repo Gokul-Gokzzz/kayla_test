@@ -177,6 +177,7 @@ class _AddDoctorsState extends State<AddDoctors> {
                           image: provider.image,
                         );
                         provider.clear();
+                        Navigator.pop(context);
                       }
                     },
                     child: Text(
