@@ -41,16 +41,22 @@ class DoctorService {
     }
   }
 
-  Future<void> update(String id, DoctorModel doctor) async {
+  editDoctor(doctorid, DoctorModel data) async {
     try {
-      await firestore.collection(collection).doc(id).update(doctor.toJson());
+      await firestore
+          .collection(collection)
+          .doc(doctorid)
+          .update(data.toJson());
     } catch (e) {
-      log('update errer:$e');
-      throw e;
+      log("error in edit data : $e");
     }
   }
 
   Future<void> delete(String id) async {
-    await firestore.collection(collection).doc(id).delete();
+    try {
+      await firestore.collection(collection).doc(id).delete();
+    } catch (e) {
+      throw e;
+    }
   }
 }

@@ -67,9 +67,10 @@ class AddProvider extends ChangeNotifier {
         phoneNumber: phoneNumber,
         genderCategory: genderCategory,
         imageUrl: imageUrl,
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
       );
       await doctorService.addDoctor(doctor);
-      getDoctor(); // Update the list of doctors
+      getDoctor();
       notifyListeners();
     } catch (error) {
       log('add controller error:$error');
@@ -91,18 +92,22 @@ class AddProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateDoctor(String id, DoctorModel doctor) async {
+  editDoctor(doctorid, DoctorModel data) async {
     try {
-      await doctorService.update(id, doctor);
+      await doctorService.editDoctor(doctorid, data);
       notifyListeners();
     } catch (e) {
-      log("error on update controller:$e");
+      log("error in edit :: $e");
     }
   }
 
   deleteDoctor(String id) async {
-    await doctorService.delete(id);
-    await getDoctor();
-    notifyListeners();
+    try {
+      await doctorService.delete(id);
+      await getDoctor();
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
   }
 }

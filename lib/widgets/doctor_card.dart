@@ -20,7 +20,7 @@ class DoctorCard extends StatelessWidget {
           child: Image.network(doctor.imageUrl!),
         ),
         title: Text(
-          doctor.name!,
+          "Dr ${doctor.name!}",
           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
         ),
         subtitle: Column(

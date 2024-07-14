@@ -1,11 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:doctor_booking/controller/add_controller.dart';
-import 'package:doctor_booking/model/doctor_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:doctor_booking/model/doctor_model.dart';
 
 class EditDoctorScreen extends StatefulWidget {
   final DoctorModel doctor;
@@ -20,18 +18,15 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final editProvider = Provider.of<AddProvider>(context, listen: false);
+    final editProvider = Provider.of<AddProvider>(context, listen: false);
 
-      editProvider.nameController.text = widget.doctor.name ?? '';
-      editProvider.emailController.text = widget.doctor.email ?? '';
-      editProvider.phoneController.text = widget.doctor.phoneNumber ?? '';
-      editProvider.districtCategory =
-          widget.doctor.districtCategory ?? 'Default District';
-      editProvider.genderCategory =
-          widget.doctor.genderCategory ?? 'Default Gender';
-      log("number :${widget.doctor.phoneNumber.toString()}");
-    });
+    editProvider.nameController.text = widget.doctor.name ?? '';
+    editProvider.emailController.text = widget.doctor.email ?? '';
+    editProvider.phoneController.text = widget.doctor.phoneNumber ?? '';
+    editProvider.districtCategory =
+        widget.doctor.districtCategory ?? 'Default District';
+    editProvider.genderCategory =
+        widget.doctor.genderCategory ?? 'Default Gender';
   }
 
   @override
@@ -153,7 +148,19 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                     backgroundColor: Color.fromARGB(255, 66, 131, 68),
                   ),
                   onPressed: () async {
-                    update(widget.doctor);
+                    final updatedDoctor = DoctorModel(
+                      id: widget.doctor.id,
+                      name: pro.nameController.text,
+                      districtCategory: pro.districtCategory!,
+                      email: pro.emailController.text,
+                      phoneNumber: pro.phoneController.text,
+                      genderCategory: pro.genderCategory!,
+                      imageUrl: pro.image != null
+                          ? await pro.doctorService.uploadImage(pro.image!)
+                          : widget.doctor.imageUrl,
+                    );
+                    updateProduct(widget.doctor.id!, widget.doctor);
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'Save',
@@ -168,14 +175,12 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     );
   }
 
-  update(DoctorModel doctor) async {
-    final pro = Provider.of<AddProvider>(context, listen: false);
-    doctor.email = pro.emailController.text;
-    doctor.name = pro.nameController.text;
-    doctor.phoneNumber = pro.phoneController.text;
-    doctor.districtCategory = pro.districtCategory.toString();
-    doctor.genderCategory = pro.genderCategory.toString();
-    await pro.updateDoctor(doctor.id!, doctor);
+  updateProduct(String id, DoctorModel data) async {
+    final getProvider = Provider.of<AddProvider>(context, listen: false);
+    data.name = getProvider.nameController.text;
+    data.email = getProvider.emailController.text;
+    data.phoneNumber = getProvider.phoneController.text;
+    await getProvider.editDoctor(data.id, data);
     Navigator.pop(context);
   }
 }
