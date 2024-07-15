@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:doctor_booking/controller/add_controller.dart';
@@ -28,10 +30,10 @@ class _AddDoctorsState extends State<AddDoctors> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Doctor'),
+        title: const Text('Add Doctor'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: provider.formKey,
           child: SingleChildScrollView(
@@ -53,7 +55,7 @@ class _AddDoctorsState extends State<AddDoctors> {
                     },
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   controller: provider.nameController,
                   decoration: InputDecoration(
@@ -71,7 +73,7 @@ class _AddDoctorsState extends State<AddDoctors> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 DropdownButtonFormField(
@@ -94,7 +96,7 @@ class _AddDoctorsState extends State<AddDoctors> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -115,7 +117,7 @@ class _AddDoctorsState extends State<AddDoctors> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -136,7 +138,7 @@ class _AddDoctorsState extends State<AddDoctors> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 DropdownButtonFormField<String>(
@@ -159,12 +161,13 @@ class _AddDoctorsState extends State<AddDoctors> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 66, 131, 68)),
+                        backgroundColor:
+                            const Color.fromARGB(255, 66, 131, 68)),
                     onPressed: () async {
                       if (provider.formKey.currentState!.validate()) {
                         await provider.addDoctor(
@@ -180,7 +183,7 @@ class _AddDoctorsState extends State<AddDoctors> {
                         Navigator.pop(context);
                       }
                     },
-                    child: Text(
+                    child: const Text(
                       'Add',
                       style: TextStyle(fontSize: 17, color: Colors.white),
                     ),

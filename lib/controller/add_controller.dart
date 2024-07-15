@@ -100,19 +100,13 @@ class AddProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteDoctor(String id) async {
+  deleteDoctor(String id) async {
     try {
-      if (id.isEmpty) {
-        log('Delete error: Document ID is empty');
-        return;
-      }
       await doctorService.delete(id);
-      log('Document with ID $id deleted successfully');
-      // Refresh the doctor list after deletion
-      await getDoctor();
-      notifyListeners();
+
+      getDoctor();
     } catch (e) {
-      log('Delete error: $e');
+      rethrow;
     }
   }
 }

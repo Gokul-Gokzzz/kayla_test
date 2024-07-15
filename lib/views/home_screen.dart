@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Consumer<HomeProvider>(
           builder: (context, provider, child) {
             if (provider.filteredDoctors.isEmpty) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else {

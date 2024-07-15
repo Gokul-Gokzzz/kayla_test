@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class DoctorCard extends StatelessWidget {
   final DoctorModel doctor;
 
-  DoctorCard({required this.doctor});
+  const DoctorCard({super.key, required this.doctor});
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +21,18 @@ class DoctorCard extends StatelessWidget {
         ),
         title: Text(
           "Dr ${doctor.name!}",
-          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               doctor.email!,
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
             ),
             Text(
               doctor.districtCategory!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 10,
               ),
             ),
@@ -58,10 +58,10 @@ class DoctorCard extends StatelessWidget {
                 ),
               );
             },
-            child: Text(
+            child: const Text(
               'Edit Profile',
               style: TextStyle(
-                color: const Color.fromARGB(255, 147, 106, 106),
+                color: Color.fromARGB(255, 147, 106, 106),
                 fontSize: 10,
               ),
             ),

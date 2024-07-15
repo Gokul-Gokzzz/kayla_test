@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +18,7 @@ class DoctorService {
 
       await docRef.set(doctor.toJson());
     } catch (error) {
-      log('service error:$error');
+      rethrow;
     }
   }
 
@@ -36,13 +35,12 @@ class DoctorService {
       final snapshot = await firestore.collection(collection).get();
       List<DoctorModel> data = snapshot.docs
           .map(
-            (doc) => DoctorModel.fromJson(doc.data() as Map<String, dynamic>),
+            (doc) => DoctorModel.fromJson(doc.data()),
           )
           .toList();
       return data;
     } catch (e) {
-      log('get error :$e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -53,7 +51,7 @@ class DoctorService {
           .doc(doctorid)
           .update(data.toJson());
     } catch (e) {
-      log("error in edit data : $e");
+      rethrow;
     }
   }
 
@@ -61,7 +59,7 @@ class DoctorService {
     try {
       await firestore.collection(collection).doc(id).delete();
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

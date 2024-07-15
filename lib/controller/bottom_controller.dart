@@ -16,7 +16,7 @@ class BottomProvider extends ChangeNotifier {
   }
 
   List userScreens = [
-    HomeScreen(),
+    const HomeScreen(),
     const AppoinmentPage(),
     const PrescriptionPage(),
     const ProfilePage()

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:doctor_booking/controller/add_controller.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ import 'package:doctor_booking/model/doctor_model.dart';
 class EditDoctorScreen extends StatefulWidget {
   final DoctorModel doctor;
 
-  const EditDoctorScreen({Key? key, required this.doctor}) : super(key: key);
+  const EditDoctorScreen({super.key, required this.doctor});
 
   @override
   State<EditDoctorScreen> createState() => _EditDoctorScreenState();
@@ -35,10 +37,10 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Edit Doctor'),
+        title: const Text('Edit Doctor'),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete, color: Colors.red),
+            icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: () async {
               await pro.deleteDoctor(widget.doctor.id!);
               Navigator.pop(context);
@@ -47,7 +49,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -55,7 +57,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                 radius: 50,
                 backgroundImage: NetworkImage(widget.doctor.imageUrl!),
                 child: IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: () async {
                     final pickedFile =
                         await pro.picker.pickImage(source: ImageSource.gallery);
@@ -65,7 +67,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: pro.nameController,
                 decoration: InputDecoration(
@@ -78,7 +80,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               DropdownButtonFormField<String>(
                 value: pro.districtCategory,
                 items: pro.districtItems,
@@ -95,7 +97,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: pro.emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -109,7 +111,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: pro.phoneController,
                 keyboardType: TextInputType.number,
@@ -123,7 +125,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               DropdownButtonFormField<String>(
                 value: pro.genderCategory,
                 items: pro.genderItems,
@@ -140,12 +142,12 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 66, 131, 68),
+                    backgroundColor: const Color.fromARGB(255, 66, 131, 68),
                   ),
                   onPressed: () async {
                     final updatedDoctor = DoctorModel(
@@ -160,7 +162,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                     );
                     updateProduct(widget.doctor.id!, updatedDoctor);
                   },
-                  child: Text(
+                  child: const Text(
                     'Save',
                     style: TextStyle(fontSize: 17, color: Colors.white),
                   ),

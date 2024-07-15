@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:doctor_booking/controller/bottom_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,7 @@ class BottomBar extends StatelessWidget {
                 onTap: value.onTap,
                 backgroundColor: const Color(0xFFFFFFFF),
                 currentIndex: value.userCurrentIndex,
+                // ignore: prefer_const_constructors
                 selectedItemColor: Color.fromARGB(255, 10, 156, 66),
                 unselectedItemColor: const Color(0xFF98A3B3),
                 showUnselectedLabels: true,
